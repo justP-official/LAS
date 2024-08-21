@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+<section class="section col-12">
+    <h2 class="section__h2 text-center">Добро пожаловать в L. A. S</h2>
+    <p class="section__text text-center">L. A. S (Lesson Accounting System) — система учёта уроков. Простая и надёжная система учёта поможет наладить порядок в учебном процессе</p>
+    <div class="row g-3">
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <div class="card-header text-center fw-bold">Войти</div>
+              <div class="card-body">
+            <form action="" method="post" class="form">
+              <div class="form-floating form__item">
+                <input type="email" class="form-control" id="id_email" placeholder="name@example.com" name="email" required>
+                <label for="id_email">Email</label>
+              </div>
+              <div class="form-floating form__item">
+                <input type="password" class="form-control" id="id_password" placeholder="Пароль" name="password" required>
+                <label for="id_password">Пароль</label>
+              </div>
+              <div class="form__item text-center">
+                <button class="btn btn-primary" type="submit">Войти</button>
+              </div>
+              <a href="user/forget_password.html">Забыли пароль?</a>
+            </form>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <img src="{% static "assets/img/pupils_list.png" %}" class="card-img-top card__img" alt="Список учеников">
+          <div class="card-body">
+            <p class="card-text text-center fw-bold">Ученики</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <img src="{% static "assets/img/lessons_list.png" %}" class="card-img-top card__img" alt="Список уроков">
+          <div class="card-body">
+            <p class="card-text text-center fw-bold">Уроки</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card h-100">
+          <img src="{% static "assets/img/reports_list.png" %}" class="card-img-top card__img" alt="Список отчётов">
+          <div class="card-body">
+            <p class="card-text text-center fw-bold">Отчёты</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock  %}

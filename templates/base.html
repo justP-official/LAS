@@ -1,0 +1,81 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static "assets/fontawesome/css/fontawesome.min.css" %}">
+    <link rel="stylesheet" href="{% static "assets/fontawesome/css/brands.min.css" %}">
+    <link rel="stylesheet" href="{% static "assets/fontawesome/css/solid.min.css" %}">
+    <link rel="stylesheet" href="{% static "assets/css/bootstrap.min.css" %}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="{% static "assets/css/style.css" %}">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <header class="header">
+        <nav class="menu navbar navbar-expand-lg">
+            <div class="container">
+              <a class="navbar-brand menu__brand" href="/">L.A.S</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                  <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Меню</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                  <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                    <li class="nav-item">
+                      <a class="nav-link menu__link" href="pupils/pupils_list.html"><i class="fa-regular fa-user"></i> Ученики</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link menu__link" href="lessons/lessons_list.html"><i class="fa-regular fa-book"></i> Уроки</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link menu__link" href="reports/reports_list.html"><i class="fa-regular fa-calendar-days"></i> Отчёты</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link menu__link" href="{% url "admin:index" %}"><i class="fa-solid fa-gear"></i> Админка</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link menu__link" href="user/profile.html"><i class="fa-regular fa-circle-user"></i> Профиль</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link menu__link" href="user/login.html"><i class="fa-solid fa-arrow-right-to-bracket"></i> Вход</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link menu__link" href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i> Выход</a>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </nav>
+    </header>
+
+    <main class="content">
+      <div class="container">
+        <div class="row">
+          {% block content %}
+          
+          {% endblock  %}
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+          <p class="footer__text text-center">&copy; L.A.S by justP</p>
+        </div>
+      </div>
+    </footer>
+    <script src="{% static "assets/js/bootstrap.bundle.min.js" %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://npmcdn.com/flatpickr/dist/l10n/ru.js"></script>
+    <script src="{% static "assets/js/main.js" %}"></script>
+</body>
+</html>
