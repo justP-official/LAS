@@ -3,9 +3,12 @@
 {% load static %}
 
 {% block content %}
-<section class="section">
+<div class="row">
+  <section class="section">
     <h2 class="section__h2 text-center">404</h2>
-    <img src="{% static "assets/img/nothing_found.png" %}" alt="Ничего не найдено" class="section__img">
+    <img src="{% static " assets/img/nothing_found.png" %}" alt="Ничего не найдено" class="section__img">
     <p class="section__text text-center fw-bold fs-4">Упс... Кажется, такой страницы не существует, но есть другие, тоже хорошие. Честно-честно :)</p>
-</section>
-{% endblock  %}
+  </section>
+</div>
+
+{% endblock %}

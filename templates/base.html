@@ -28,27 +28,32 @@
                 </div>
                 <div class="offcanvas-body">
                   <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                    <li class="nav-item">
-                      <a class="nav-link menu__link" href="pupils/pupils_list.html"><i class="fa-regular fa-user"></i> Ученики</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link menu__link" href="lessons/lessons_list.html"><i class="fa-regular fa-book"></i> Уроки</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link menu__link" href="reports/reports_list.html"><i class="fa-regular fa-calendar-days"></i> Отчёты</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link menu__link" href="{% url "admin:index" %}"><i class="fa-solid fa-gear"></i> Админка</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link menu__link" href="user/profile.html"><i class="fa-regular fa-circle-user"></i> Профиль</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link menu__link" href="user/login.html"><i class="fa-solid fa-arrow-right-to-bracket"></i> Вход</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link menu__link" href="#"><i class="fa-solid fa-arrow-right-from-bracket"></i> Выход</a>
-                    </li>
+                    {% if user.is_authenticated %}
+                      <li class="nav-item">
+                        <a class="nav-link menu__link" href="pupils/pupils_list.html"><i class="fa-regular fa-user icon"></i>Ученики</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link menu__link" href="lessons/lessons_list.html"><i class="fa-regular fa-book icon"></i>Уроки</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link menu__link" href="reports/reports_list.html"><i class="fa-regular fa-calendar-days icon"></i>Отчёты</a>
+                      </li>
+                      {% if user.is_admin or user.is_staff %}
+                        <li class="nav-item">
+                          <a class="nav-link menu__link" href="{% url "admin:index" %}"><i class="fa-solid fa-gear icon"></i>Админка</a>
+                        </li>
+                      {% endif %}
+                      <li class="nav-item">
+                        <a class="nav-link menu__link" href="{% url "user:profile" %}"><i class="fa-regular fa-circle-user icon"></i>Профиль</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link menu__link" href="{% url "user:logout" %}"><i class="fa-solid fa-arrow-right-from-bracket icon"></i>Выход</a>
+                      </li>
+                    {% else %}
+                      <li class="nav-item">
+                        <a class="nav-link menu__link" href="{% url "user:login" %}"><i class="fa-solid fa-arrow-right-to-bracket icon"></i>Вход</a>
+                      </li>
+                    {% endif %}
                   </ul>
                 </div>
               </div>
@@ -58,11 +63,9 @@
 
     <main class="content">
       <div class="container">
-        <div class="row">
-          {% block content %}
-          
-          {% endblock  %}
-        </div>
+        {% block content %}
+        
+        {% endblock  %}
       </div>
     </main>
 

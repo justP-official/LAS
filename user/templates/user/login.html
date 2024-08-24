@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <section class="section col-lg-6 col-sm-12">
+    <h2 class="section__h2 text-center text-uppercase">Вход</h2>
+    <form action="{% url "user:login" %}" method="post" class="form">
+      {% csrf_token %}
+      {% if request.GET.next %}
+        <input type="hidden" name="next" value="{{ request.GET.next }}">
+      {% endif %}
+      <div class="form-floating form__item">
+        <input type="text" class="form-control" id="id_username" placeholder="name@example.com" name="username" required>
+        <label for="id_username">Email</label>
+      </div>
+      <div class="form-floating form__item">
+        <input type="password" class="form-control" id="id_password" placeholder="Пароль" name="password" required>
+        <label for="id_password">Пароль</label>
+      </div>
+      
+      {% if form.errors %}
+        <div class="form__errors">
+          {% for field, errors in form.errors.items  %}
+            {% for error in errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+          {% endfor %}
+        </div>
+      {% endif %}
+      
+      <div class="form__item text-center">
+        <button class="btn btn-primary" type="submit">Войти</button>
+      </div>
+      <a href="{% url "user:password_reset" %}">Забыли пароль?</a>
+    </form>
+  </section>
+</div>
+
+{% endblock %}

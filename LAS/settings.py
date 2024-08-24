@@ -30,9 +30,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('debug')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [*os.environ.get('allowed_hosts').split(',')] if not DEBUG else []
 
 
 # Application definition
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'main',
+    'user',
 ]
 
 MIDDLEWARE = [
@@ -183,3 +184,13 @@ LOGGING = {
         },
     }
 }
+
+AUTH_USER_MODEL = 'user.User'
+LOGIN_URL = '/user/login/'
+LOGIN_REDIRECT_URL = 'main:index'
+LOGOUT_REDIRECT_URL = 'main:index'
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    'user.authentication.EmailAuthBackend',
+]
