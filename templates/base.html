@@ -30,7 +30,7 @@
                   <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
                     {% if user.is_authenticated %}
                       <li class="nav-item">
-                        <a class="nav-link menu__link" href="pupils/pupils_list.html"><i class="fa-regular fa-user icon"></i>Ученики</a>
+                        <a class="nav-link menu__link" href="{% url "pupils:pupils_list" %}?is_active=1"><i class="fa-regular fa-user icon"></i>Ученики</a>
                       </li>
                       <li class="nav-item">
                         <a class="nav-link menu__link" href="lessons/lessons_list.html"><i class="fa-regular fa-book icon"></i>Уроки</a>
