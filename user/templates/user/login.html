@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load service_tags %}
+
 {% block content %}
 <div class="row justify-content-center">
   <section class="section col-lg-6 col-sm-12">
@@ -11,7 +13,10 @@
       {% if request.GET.next %}
         <input type="hidden" name="next" value="{{ request.GET.next }}">
       {% endif %}
-      <div class="form-floating form__item">
+
+      {% draw_form form %}
+
+      {% comment %} <div class="form-floating form__item">
         <input type="text" class="form-control" id="id_username" placeholder="name@example.com" name="username" required>
         <label for="id_username">Email</label>
       </div>
@@ -28,7 +33,7 @@
             {% endfor %}
           {% endfor %}
         </div>
-      {% endif %}
+      {% endif %} {% endcomment %}
       
       <div class="form__item text-center">
         <button class="btn btn-primary" type="submit">Войти</button>
