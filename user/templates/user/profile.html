@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load service_tags %}
+
 {% block content %}
 <div class="row">
   <section class="section">
@@ -10,7 +12,9 @@
     <h3 class="section__h3">Изменить пароль</h3>
     <form action="{% url "user:password_change" %}" method="post" class="form">
       {% csrf_token %}
-      <div class="form-floating form__item">
+
+      {% draw_form form %}
+      {% comment %} <div class="form-floating form__item">
         <input type="password" class="form-control" id="id_old_password" placeholder="Старый пароль" name="old_password" required>
         <label for="id_old_password">Старый пароль</label>
       </div>
@@ -31,7 +35,7 @@
             {% endfor %}
           {% endfor %}
         </div>
-      {% endif %}
+      {% endif %} {% endcomment %}
       
       <div class="form__item">
         <button class="btn btn-primary" type="submit">Изменить</button>
