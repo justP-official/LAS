@@ -1,0 +1,27 @@
+{% if page_obj.has_other_pages %}
+<nav aria-label="Пагинация">
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Предыдущая страница">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+    {% endif %}
+
+    {% for p in paginator.page_range %}
+      {% if p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %} 
+        <li class="page-item {% if page_obj.number == p %} active {% endif %}"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+      {% endif %}
+    {% endfor %}
+    
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Следующая страница">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}

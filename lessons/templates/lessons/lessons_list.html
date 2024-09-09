@@ -14,7 +14,7 @@
       </div>
       <div class="offcanvas-body flex-column">
         <h3>Фильтр</h3>
-        <form action="{% url "pupils:pupils_list" %}" method="get" class="form">
+        <form action="{% url "lessons:lessons_list" %}" method="get" class="form">
           {% draw_form form %}
           <div class="form__item text-center">
             <button class="btn btn-primary" type="submit">Применить</button>
@@ -24,32 +24,26 @@
     </div>
   </div>
   <div class="col-lg-9 col-sm-12">
-    <h2>Список учеников</h2>
+    <h2>Список уроков</h2>
     <div class="togglers">
-      <a href="{% url "pupils:create_pupil" %}" class="btn btn-success"><i class="fa-solid fa-plus"></i> Добавить</a>
+      <a href="{% url "lessons:create_lesson" %}" class="btn btn-success"><i class="fa-solid fa-plus"></i> Добавить</a>
       <button data-bs-toggle="offcanvas" data-bs-target="#filter" role="button" class="btn btn-secondary btn_filter"
         aria-controls="filter"><i class="fa-solid fa-filter"></i> Фильтр</button>
     </div>
     <div class="cards row g-3">
-      {% if pupils %}
-        {% for pupil in pupils %}
+      {% if lessons %}
+        {% for lesson in lessons %}
           <div class="card">
             <div class="card-body">
-              <h5 class="card-title">{{ pupil.name }}</h5>
-              <p class="card-text">{{ pupil.description|truncatewords:50 }}</p>
-              <p class="card-text">Цена за час: {{ pupil.price_per_hour }} руб</p>
-              <p class="card-text">Класс: {{ pupil.class_counter }}</p>
-              <p class="card-text">Только скайп: {% if pupil.skype_only %}Да{% else %}Нет{% endif %}</p>
-              <p class="card-text">Активен: {% if pupil.is_active %}Да{% else %}Нет{% endif %}</p>
-              {% if pupil.subjects %}
-                <div class="subjects">
-                  <p class="subjects__text fw-bold">Предметы</p>
-                  {% for subject in pupil.subjects.all %}
-                    <span class="badge text-bg-primary">{{ subject.name }}</span>
-                  {% endfor %}
-                </div>
-              {% endif %}
-              <a href="{% url "pupils:update_pupil" pupil.id %}" class="card-link">Редактировать</a>
+              <h5 class="card-title">{{ lesson.pupil }}</h5>
+              <p class="card-text">Денег заработано: {{ lesson.money_recived }} руб</p>
+              <p class="card-text">Дата проведения: {{ lesson.lesson_datetime }}</p>
+              <p class="card-text">Времени затрачено: {{ lesson.lesson_duration }}</p>
+              <div class="subjects">
+                <p class="subjects__text fw-bold">Предмет</p>
+                <span class="badge text-bg-primary">{{ lesson.subject }}</span>
+              </div>
+              <a href="{% url "lessons:update_lesson" lesson.id %}" class="card-link">Редактировать</a>
             </div>
           </div>
         {% endfor %}
