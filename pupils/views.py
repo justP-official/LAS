@@ -22,7 +22,7 @@ class PupilsListView(LoginRequiredMixin, ListView):
 
         skype_only = self.request.GET.get('skype_only', None)
 
-        is_active = self.request.GET.get('is_active', None)
+        show_inactive = self.request.GET.get('show_inactive', None)
 
         subjects = self.request.GET.getlist('subjects', None)
 
@@ -32,11 +32,10 @@ class PupilsListView(LoginRequiredMixin, ListView):
         if skype_only:
             pupils = pupils.filter(skype_only=skype_only)
 
-        if is_active:
-            pupils = pupils.filter(is_active=is_active)
+        if not show_inactive:
+            pupils = pupils.exclude(is_active=False)
 
         if subjects:
-            print(subjects)
             pupils = pupils.filter(subjects__id__in=subjects)
 
         return pupils
