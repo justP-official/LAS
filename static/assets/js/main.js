@@ -1,16 +1,7 @@
-const datetimepicker = document.querySelectorAll('input[type=datetime-local]');
+let current_page = window.location.pathname;
 
-const datetimepicker_config = {
-    enableTime: true,
-    dateFormat: "d-m-Y H:i",
-    'locale': 'ru'
-}
+console.log(current_page)
 
-flatpickr(datetimepicker, datetimepicker_config)
+let active_link = document.querySelector(`.nav-link[href='${current_page}']`);
 
-// let f = document.querySelector('.form')
-
-// f.addEventListener('submit', function(e) {
-//     e.preventDefault()
-//     console.log(f.datetime.value)
-// })
+active_link.classList.add('active')

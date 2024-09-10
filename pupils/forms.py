@@ -23,8 +23,8 @@ class PupilsFilterForm(forms.Form):
             attrs={"class": "form-check-input", "role": "switch", "value": 1}
         ),
     )
-    is_active = forms.BooleanField(
-        label="Только активные",
+    show_inactive = forms.BooleanField(
+        label="Показать неактивных",
         required=False,
         widget=forms.CheckboxInput(
             attrs={"class": "form-check-input", "role": "switch", "value": 1}

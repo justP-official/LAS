@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% load service_tags %}
+
+{% block additional_styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock  %}
+
+{% block content %}
+<div class="row">
+  <section class="section">
+    <h2 class="section__h2 text-center">Обновить данные урока</h2>
+    <form action="{% url "lessons:update_lesson" lesson.id %}" method="post" class="form">
+      {% csrf_token %}
+      {% draw_form form %}
+      <div class="form__item text-center">
+        <button class="btn btn-primary" type="submit">Обновить</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="section">
+    <h2 class="section__h2">Удалить урок</h2>
+    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteLesson" role="button">Удалить</button>
+  </section>
+</div>
+
+<div class="modal fade" id="deleteLesson" tabindex="-1" aria-labelledby="deleteLessonLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="deleteLessonLabel">Удалить урок</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Вы действительно хотите удалить {{ lesson }}?</p>
+      </div>
+      <div class="modal-footer">
+        <form action="{% url "lessons:delete_lesson" lesson.id %}" method="post" class="form">
+          {% csrf_token %}
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+          <button type="submit" class="btn btn-danger">Да, удалить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block additional_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/ru.js"></script>
+<script src="{% static "assets/js/get_updated_datetime.js" %}"></script>
+{% endblock  %}

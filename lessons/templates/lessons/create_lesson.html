@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% load service_tags %}
+
+{% block additional_styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock  %}
+
+{% block content %}
+<div class="row">
+  <section class="section">
+    <h2 class="section__h2 text-center">Добавить урок</h2>
+    <form action="{% url "lessons:create_lesson" %}" method="post" class="form">
+      {% csrf_token %}
+      {% draw_form form %}
+      <div class="form__item text-center">
+        <button class="btn btn-success" type="submit">Добавить</button>
+      </div>
+    </form>
+  </section>
+</div>
+{% endblock %}
+
+{% block additional_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/ru.js"></script>
+<script src="{% static "assets/js/datetimepikers.js" %}"></script>
+<script src="{% static "assets/js/change_money_recived.js" %}"></script>
+{% endblock  %}
