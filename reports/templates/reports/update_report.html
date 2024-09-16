@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% load service_tags %}
+
+{% block additional_styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock  %}
+
+{% block content %}
+<div class="row">
+  <section class="section">
+    <h2 class="section__h2 text-center">Обновить данные отчёта</h2>
+    <form action="{% url "reports:update_report" report.id %}" method="post" class="form">
+      {% csrf_token %}
+      {% draw_form form %}
+      <div class="form__item text-center">
+        <button class="btn btn-primary" type="submit">Обновить</button>
+      </div>
+    </form>
+  </section>
+
+  <section class="section">
+    <h2 class="section__h2">Удалить отчёт</h2>
+    <button class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deletereport" role="button">Удалить</button>
+  </section>
+</div>
+
+<div class="modal fade" id="deletereport" tabindex="-1" aria-labelledby="deletereportLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="deletereportLabel">Удалить отчёт</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Вы действительно хотите удалить {{ report }}?</p>
+      </div>
+      <div class="modal-footer">
+        <form action="{% url "reports:delete_report" report.id %}" method="post" class="form">
+          {% csrf_token %}
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+          <button type="submit" class="btn btn-danger">Да, удалить</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block additional_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/ru.js"></script>
+<script src="{% static "assets/js/get_updated_date.js" %}"></script>
+{% endblock  %}

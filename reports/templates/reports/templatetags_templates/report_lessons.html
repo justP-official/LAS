@@ -1,0 +1,17 @@
+{% if report %}
+  <h2 class="text-center">{{ report }}</h2>
+{% endif %}
+
+{% if lessons %}
+  <ol>
+    {% for lesson in lessons %}
+      <li>{{ lesson.subject }}; {{ lesson.lesson_datetime }}</li>
+    {% endfor %}
+  </ol>
+
+  <hr>
+
+  <p class="section__text"><span class="fw-bold">Итого: </span>{{ lessons.total_money }} руб</p>
+{% else %}
+  <h3>Уроков нет</h3>
+{% endif %}

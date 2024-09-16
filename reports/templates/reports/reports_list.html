@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% load service_tags %}
+
+{% block additional_styles %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-lg-3 col-sm-12">
+    <div class="offcanvas-lg offcanvas-start" tabindex="-1" id="filter" aria-labelledby="filterLabel">
+      <div class="offcanvas-header">
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#filter"
+          aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body flex-column">
+        <h3>Фильтр</h3>
+        <form action="{% url "reports:reports_list" %}" method="get" class="form">
+          {% draw_form form %}
+          <div class="form__item text-center">
+            <button class="btn btn-primary" type="submit">Применить</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-9 col-sm-12">
+    <h2>Список отчётов</h2>
+    <div class="togglers">
+      <a href="{% url "reports:create_report" %}" class="btn btn-success"><i class="fa-solid fa-plus"></i> Добавить</a>
+      <button data-bs-toggle="offcanvas" data-bs-target="#filter" role="button" class="btn btn-secondary btn_filter"
+        aria-controls="filter"><i class="fa-solid fa-filter"></i> Фильтр</button>
+    </div>
+    <div class="cards row g-3">
+      {% if reports %}
+      {% for report in reports %}
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">{{ report.pupil }}</h5>
+          <p class="card-text">Период проведения уроков: с {{ report.start_period }} по {{ report.end_period }}</p>
+          <a href="{{ report.get_absolute_url }}" class="card-link">Открыть</a>
+          <a href="{% url "reports:update_report" report.id %}" class="card-link">Редактировать</a>
+        </div>
+      </div>
+      {% endfor %}
+
+      {% pagination page_obj paginator %}
+
+      {% else %}
+      <h3>Ничего не найдено!</h3>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block additional_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://npmcdn.com/flatpickr/dist/l10n/ru.js"></script>
+<script src="{% static "assets/js/datepikers.js" %}"></script>
+{% endblock %}
