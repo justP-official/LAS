@@ -15,4 +15,6 @@ L. A. S (Lesson Accounting System) — система учёта уроков. �
 ### Backend
 - Python;
 - Django;
-- ReportLab;
+- ~~ReportLab;~~
+- Weasyprint;
+- PyMuPDF;
