@@ -49,7 +49,7 @@
                   {% endfor %}
                 </div>
               {% endif %}
-              <a href="{% url "pupils:update_pupil" pupil.id %}" class="card-link">Редактировать</a>
+              <a href="{{ pupil.get_absolute_url }}" class="card-link">Редактировать</a>
             </div>
           </div>
         {% endfor %}

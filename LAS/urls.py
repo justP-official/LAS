@@ -25,6 +25,7 @@ urlpatterns = [
     path('user/', include('user.urls', namespace='user')),
     path('pupils/', include('pupils.urls', namespace='pupils')),
     path('lessons/', include('lessons.urls', namespace='lessons')),
+    path('reports/', include('reports.urls', namespace='reports')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 handler404 = 'main.views.view_404'

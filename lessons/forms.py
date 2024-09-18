@@ -43,7 +43,7 @@ class CreateLessonForm(forms.ModelForm):
             'pupil': forms.Select(attrs={'class': 'form-select'}),
             'subject': forms.Select(attrs={'class': 'form-select'}),
             'lesson_datetime': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local', 'placeholder': '08-09-2024 12:00'}),
-            'lesson_duration': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.5'}),
+            'lesson_duration': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.5', 'min': 0.5, 'max': 2}),
             'money_recived': forms.NumberInput(attrs={'class': 'form-control'}),
 
         }
@@ -70,7 +70,7 @@ class UpdateLessonForm(forms.ModelForm):
                 'lesson_datetime': forms.DateTimeInput(attrs={'class': 'form-control datetime-updater', 
                                                               'type': 'datetime-local', 
                                                               'placeholder': '2024-08-09 12:00'}),
-                'lesson_duration': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.5'}),
+                'lesson_duration': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.5', 'min': 0.5, 'max': 2}),
                 'money_recived': forms.NumberInput(attrs={'class': 'form-control'}),
             }
         

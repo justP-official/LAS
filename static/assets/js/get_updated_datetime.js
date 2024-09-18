@@ -6,6 +6,8 @@
 // Почему-то, при рендере формы, не отображается дата и время,
 // приходится создавать отдельный инпут с прописанным значением
 
+import {get_data} from '../js/main.js'
+
 (async function() {
     // получение id текущего урока из адреса страницы
 
@@ -17,30 +19,17 @@
 
     let datetime_updater = document.querySelector('.datetime-updater');
 
-    let default_date = await get_lesson_datetime(lesson_id);
+    let request_url = `/lessons/get-lesson-datetime/${lesson_id}`;
+
+    let [default_datetime = Date.now()] = await get_data(request_url);  // получаем данные; если данных нет, ставим текущую дату
 
     let datetime_updater_config = {
         enableTime: true,
         dateFormat: "Y-m-d H:i",
-        defaultDate: default_date,
+        defaultDate: default_datetime,
         'locale': 'ru'
     }
 
     flatpickr(datetime_updater, datetime_updater_config)
     }
 )();
-
-async function get_lesson_datetime(lesson_id) {
-    // функция для получения даты и времени урока по id
-    let request_url = `/lessons/get-lesson-datetime/${lesson_id}`;
-
-    let response = await fetch(request_url);
-
-    if (response.ok) {
-        let json_data = await response.json();
-
-        let lesson_datetime = json_data['lesson_datetime'];
-
-        return lesson_datetime;
-    }
-}

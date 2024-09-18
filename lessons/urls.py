@@ -5,7 +5,7 @@ from lessons import views
 app_name = 'lessons'
 
 urlpatterns = [
-    path('lessons-list/', views.LessonsListView.as_view(), name='lessons_list'),
+    path('', views.LessonsListView.as_view(), name='lessons_list'),
     path('create-lesson/', views.CreateLessonView.as_view(), name='create_lesson'),
     path('update-lesson/<int:pk>/', views.UpdateLessonView.as_view(), name='update_lesson'),
     path('delete-lesson/<int:pk>/', views.DeleteLessonView.as_view(), name='delete_lesson'),
