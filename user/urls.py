@@ -6,8 +6,8 @@ from user import views
 app_name = 'user'
 
 urlpatterns = [
+    path('', views.UserProfile.as_view(), name='profile'),
     path('login/', views.UserLogin.as_view(), name='login'),
-    path('profile/', views.UserProfile.as_view(), name='profile'),
     path('password-change/', views.UserPasswordChange.as_view(), name='password_change'),
     path('password-reset/', PasswordResetView.as_view(
         template_name='user/password_reset_form.html', 

@@ -47,7 +47,7 @@
                 <p class="subjects__text fw-bold">Предмет</p>
                 <span class="badge text-bg-primary">{{ lesson.subject }}</span>
               </div>
-              <a href="{% url "lessons:update_lesson" lesson.id %}" class="card-link">Редактировать</a>
+              <a href="{{ lesson.get_absolute_url }}" class="card-link">Редактировать</a>
             </div>
           </div>
         {% endfor %}
