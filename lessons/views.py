@@ -1,6 +1,3 @@
-import datetime
-
-from django.utils import timezone
 from django.urls import reverse_lazy
 from django.http import JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -24,20 +21,15 @@ class LessonsListView(LoginRequiredMixin, ListView):
 
         pupil = self.request.GET.get('pupil', None)
 
-        lesson_datetime = self.request.GET.get('lesson_datetime', None)
+        lesson_date = self.request.GET.get('lesson_date', None)
 
         subject = self.request.GET.get('subject', None)
 
         if pupil:
             lessons = lessons.filter(pupil__id=pupil)
 
-        if lesson_datetime:
-            # получаем объект datetime из запроса
-            dt = timezone.datetime.strptime(lesson_datetime, '%Y-%m-%d %H:%M')
-            # устанавливаем дате часовой пояс (иначе django ругается)
-            dt = timezone.make_aware(dt, timezone.get_current_timezone())
-
-            lessons = lessons.filter(lesson_datetime__date=dt.date(), lesson_datetime__time=dt.time())
+        if lesson_date:
+            lessons = lessons.filter(lesson_datetime__date=lesson_date)
 
         if subject:
             lessons = lessons.filter(subject__id=subject)

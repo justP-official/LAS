@@ -31,7 +31,8 @@ class Lesson(models.Model):
                                 )
     
     lesson_datetime = models.DateTimeField(verbose_name='Дата проведения урока',
-                                    auto_now_add=False
+                                    auto_now_add=False,
+                                    unique=True
                                     )
     
     lesson_duration = models.DecimalField(verbose_name='Продолжительность урока', 

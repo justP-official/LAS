@@ -2,7 +2,6 @@ from http import HTTPStatus
 
 from django.test import TestCase
 from django.urls import reverse
-from django.contrib import auth
 
 from pupils.models import Pupil
 
