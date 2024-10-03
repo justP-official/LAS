@@ -1,17 +1,10 @@
-from django.shortcuts import get_object_or_404
-from django.urls import reverse, reverse_lazy
-from django.utils.encoding import escape_uri_path
-from django.http import HttpResponse, JsonResponse, FileResponse
+from django.urls import reverse_lazy
+from django.http import HttpResponse, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View, ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
-import requests
-from weasyprint import HTML
-
 from transliterate import slugify
-
-import pymupdf
 
 from reports.models import Report
 
@@ -39,10 +32,10 @@ class ReportsListView(LoginRequiredMixin, ListView):
             reports = reports.filter(pupil__id=pupil)
 
         if start_period:
-            reports = reports.filter(start_period__ge=start_period)
+            reports = reports.filter(start_period__gte=start_period)
 
         if end_period:
-            reports = reports.filter(end_period__le=end_period)
+            reports = reports.filter(end_period__lte=end_period)
 
         return reports
 
