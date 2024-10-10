@@ -181,7 +181,7 @@ class LessonsAppTestCase(TestCase):
         '''Тест страницы обновления данных урока'''
         self.client.force_login(self.user_owner)
 
-        path = reverse('lessons:update_lesson', kwargs={'pk': 1})
+        path = reverse('lessons:update_lesson', kwargs={'lesson_id': 1})
 
         response = self.client.get(path)
 
@@ -191,7 +191,7 @@ class LessonsAppTestCase(TestCase):
 
     def test_redirect_update_lesson_page(self):
         '''Тест перенаправления неавторизованного пользователя со страницы обновления данных урока'''
-        path = reverse('lessons:update_lesson', kwargs={'pk': 1})
+        path = reverse('lessons:update_lesson', kwargs={'lesson_id': 1})
 
         response = self.client.get(path)
 
@@ -204,12 +204,12 @@ class LessonsAppTestCase(TestCase):
         '''Тест обновления данных урока'''
         self.client.force_login(self.user_owner)
 
-        path = reverse('lessons:update_lesson', kwargs={'pk': 1})
+        path = reverse('lessons:update_lesson', kwargs={'lesson_id': 1})
 
         response = self.client.post(path, data=self.lesson_data)
 
         lesson = Lesson.objects.get(pk=1)
-
+        
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertRedirects(response, path)
 
@@ -225,25 +225,41 @@ class LessonsAppTestCase(TestCase):
 
         self.client.force_login(self.user_owner)
 
-        path = reverse('lessons:update_lesson', kwargs={'pk': 1})
+        path = reverse('lessons:update_lesson', kwargs={'lesson_id': 1})
 
         response = self.client.post(path, data=self.lesson_data)
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertContains(response, 'Слишком короткий урок')
 
+    def test_update_lesson_forbidden(self):
+        '''Тест запрета обновления чужого ученика'''
+        self.client.force_login(self.user_not_owner)
+
+        path = reverse('lessons:update_lesson', kwargs={'lesson_id': 1})
+
+        response = self.client.get(path)
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertContains(response, '403')
+
+        response = self.client.post(path, data=self.lesson_data)
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertContains(response, '403')
+
     def test_delete_lesson(self):
         '''Тест удаления урока'''
         self.client.force_login(self.user_owner)
 
-        path = reverse('lessons:delete_lesson', kwargs={'pk': 1})
+        path = reverse('lessons:delete_lesson', kwargs={'lesson_id': 1})
 
         response = self.client.post(path)
 
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertRedirects(response, reverse('lessons:lessons_list'))
 
-        path = reverse('lessons:update_lesson', kwargs={'pk': 1})
+        path = reverse('lessons:update_lesson', kwargs={'lesson_id': 1})
 
         response = self.client.get(path)
 
@@ -252,3 +268,14 @@ class LessonsAppTestCase(TestCase):
         lesson = Lesson.objects.filter(id=1).first()
 
         self.assertFalse(lesson)
+
+    def test_delete_lesson_forbidden(self):
+        '''Тест запрета обновления чужого ученика'''
+        self.client.force_login(self.user_not_owner)
+
+        path = reverse('lessons:delete_lesson', kwargs={'lesson_id': 1})
+
+        response = self.client.post(path)
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertContains(response, '403')

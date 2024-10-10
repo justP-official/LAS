@@ -23,7 +23,7 @@ class Pupil(models.Model):
         return self.name
     
     def get_absolute_url(self):
-        return reverse("pupils:update_pupil", kwargs={"pk": self.pk})
+        return reverse("pupils:update_pupil", kwargs={"pupil_id": self.pk})
     
     
 

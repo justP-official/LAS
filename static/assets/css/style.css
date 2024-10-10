@@ -57,7 +57,7 @@ body {
 
 .section__img {
     display: block;
-    width: 200px;
+    max-width: 500px;
     margin-inline: auto;
     margin-bottom: 24px;
 }

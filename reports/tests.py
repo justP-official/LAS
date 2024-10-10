@@ -159,7 +159,7 @@ class ReportsAppTestCase(TestCase):
         response = self.client.post(path, data=self.report_data)
 
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertRedirects(response, reverse('reports:read_report', kwargs={'pk': Report.objects.first().pk}))
+        self.assertRedirects(response, reverse('reports:read_report', kwargs={'report_id': Report.objects.first().pk}))
         self.assertTrue(Report.objects.filter(
             pupil__id=self.report_data['pupil'],
             start_period=self.report_data['start_period'],
@@ -184,7 +184,7 @@ class ReportsAppTestCase(TestCase):
         '''Тест страницы просмотра отчёта'''
         self.client.force_login(self.user_owner)
 
-        path = reverse('reports:read_report', kwargs={'pk': 1})
+        path = reverse('reports:read_report', kwargs={'report_id': 1})
 
         response = self.client.get(path)
 
@@ -194,7 +194,7 @@ class ReportsAppTestCase(TestCase):
     
     def test_redirect_read_report_page(self):
         '''Тест перенаправления неавторизованного пользователя со страницы просмотра отчёта'''
-        path = reverse('reports:read_report', kwargs={'pk': 1})
+        path = reverse('reports:read_report', kwargs={'report_id': 1})
 
         response = self.client.get(path)
 
@@ -203,11 +203,23 @@ class ReportsAppTestCase(TestCase):
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertRedirects(response, redirect_url)
 
+    def test_read_report_forbidden(self):
+        '''Тест запрета просмотра чужого отчёта'''
+        self.client.force_login(self.user_not_owner)
+
+        path = reverse('reports:read_report', kwargs={'report_id': 1})
+
+        response = self.client.get(path)
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertContains(response, '403')
+
+
     def test_update_report_page(self):
         '''Тест страницы обновления данных отчёта'''
         self.client.force_login(self.user_owner)
 
-        path = reverse('reports:update_report', kwargs={'pk': 1})
+        path = reverse('reports:update_report', kwargs={'report_id': 1})
 
         response = self.client.get(path)
 
@@ -217,7 +229,7 @@ class ReportsAppTestCase(TestCase):
 
     def test_redirect_update_report_page(self):
         '''Тест перенаправления неавторизованного пользователя со страницы обновления данных отчёта'''
-        path = reverse('reports:update_report', kwargs={'pk': 1})
+        path = reverse('reports:update_report', kwargs={'report_id': 1})
 
         response = self.client.get(path)
 
@@ -230,14 +242,14 @@ class ReportsAppTestCase(TestCase):
         '''Тест обновления данных отчёта'''
         self.client.force_login(self.user_owner)
 
-        path = reverse('reports:update_report', kwargs={'pk': 1})
+        path = reverse('reports:update_report', kwargs={'report_id': 1})
 
         response = self.client.post(path, data=self.report_data)
 
         report = Report.objects.get(pk=1)
 
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
-        self.assertRedirects(response, reverse('reports:read_report', kwargs={'pk': 1}))
+        self.assertRedirects(response, reverse('reports:read_report', kwargs={'report_id': 1}))
 
         for key, value in self.report_data.items():
             if key == 'pupil':
@@ -251,30 +263,57 @@ class ReportsAppTestCase(TestCase):
 
         self.client.force_login(self.user_owner)
 
-        path = reverse('reports:update_report', kwargs={'pk': 1})
+        path = reverse('reports:update_report', kwargs={'report_id': 1})
 
         response = self.client.post(path, data=self.report_data)
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertContains(response, 'Выберите корректный вариант. Вашего варианта нет среди допустимых значений')
 
+    def test_update_report_forbidden(self):
+        '''Тест запрета обновления чужого отчёта'''
+        self.client.force_login(self.user_not_owner)
+
+        path = reverse('reports:update_report', kwargs={'report_id': 1})
+
+        response = self.client.get(path)
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertContains(response, '403')
+
+        response = self.client.post(path, data=self.report_data)
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertContains(response, '403')
+
     def test_delete_report(self):
         '''Тест удаления отчёта'''
         self.client.force_login(self.user_owner)
 
-        path = reverse('reports:delete_report', kwargs={'pk': 1})
+        path = reverse('reports:delete_report', kwargs={'report_id': 1})
 
         response = self.client.post(path)
 
         self.assertEqual(response.status_code, HTTPStatus.FOUND)
         self.assertRedirects(response, reverse('reports:reports_list'))
 
-        path = reverse('reports:update_report', kwargs={'pk': 1})
+        path = reverse('reports:update_report', kwargs={'report_id': 1})
 
         response = self.client.get(path)
 
         self.assertContains(response, 404)
 
-    #     report = Report.objects.filter(id=1).first()
+        report = Report.objects.filter(id=1).first()
 
-    #     self.assertFalse(report)
+        self.assertFalse(report)
+
+    def test_update_report_forbidden(self):
+        '''Тест запрета удаления чужого отчёта'''
+        self.client.force_login(self.user_not_owner)
+
+        path = reverse('reports:delete_report', kwargs={'report_id': 1})
+
+        response = self.client.post(path)
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertContains(response, '403')

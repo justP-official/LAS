@@ -1,5 +1,6 @@
 from django.urls import reverse_lazy
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, Http404, JsonResponse
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View, ListView, DetailView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -11,6 +12,8 @@ from reports.models import Report
 from reports.forms import ReportsFilterForm, CreateReportForm, UpdateReportForm
 
 from reports.utils import generate_pdf, convert_pdf_to_png
+
+from user.utils import verify_owner
 
 
 class ReportsListView(LoginRequiredMixin, ListView):
@@ -72,11 +75,33 @@ class ReadReportView(LoginRequiredMixin, DetailView):
     template_name = 'reports/read_report.html'
     context_object_name = 'report'
     model = Report
+    pk_url_kwarg = 'report_id'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'L.A.S - Просмотр отчёта'
         return context
+    
+    def get_object(self, report_id=None, queryset=None):
+        try:
+            if report_id is None:
+                report_id = self.kwargs.get(self.pk_url_kwarg)
+
+            report = Report.objects.get(id=report_id)
+        except Report.DoesNotExist:
+            report = None
+        finally:
+            return report
+    
+    def get(self, request, report_id, *args, **kwargs):
+        report = self.get_object(report_id)
+
+        if report is not None:
+            if verify_owner(report.pupil.owner, self.request.user):
+                return super().get(request, report_id, *args, **kwargs)
+            else:
+                raise PermissionDenied()
+        raise Http404()
 
 
 class UpdateReportView(LoginRequiredMixin, UpdateView):
@@ -85,6 +110,7 @@ class UpdateReportView(LoginRequiredMixin, UpdateView):
     form_class = UpdateReportForm
     model = Report
     context_object_name = 'report'
+    pk_url_kwarg = 'report_id'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -99,47 +125,121 @@ class UpdateReportView(LoginRequiredMixin, UpdateView):
     
     def form_valid(self, form):
         return super().form_valid(form)
+    
+    def get_object(self, report_id=None, queryset=None):
+        try:
+            if report_id is None:
+                report_id = self.kwargs.get(self.pk_url_kwarg)
 
+            report = Report.objects.get(id=report_id)
+        except Report.DoesNotExist:
+            report = None
+        finally:
+            return report
+    
+    def get(self, request, report_id, *args, **kwargs):
+        report = self.get_object(report_id)
+
+        if report is not None:
+            if verify_owner(report.pupil.owner, self.request.user):
+                return super().get(request, report_id, *args, **kwargs)
+            else:
+                raise PermissionDenied()
+        raise Http404()
+
+    def post(self, request, report_id, *args, **kwargs):
+        report = self.get_object(report_id)
+
+        if report is not None:
+            if verify_owner(report.pupil.owner, self.request.user):
+                return super().post(request, report_id, *args, **kwargs)
+            else:
+                raise PermissionDenied()
+        raise Http404()
 
 class DeleteReportView(LoginRequiredMixin, DeleteView):
     """Класс представления для удаления отчёта"""
     model = Report
     success_url = reverse_lazy('reports:reports_list')
+    pk_url_kwarg = 'report_id'
+    
+    def get_object(self, report_id=None, queryset=None):
+        try:
+            if report_id is None:
+                report_id = self.kwargs.get(self.pk_url_kwarg)
 
+            report = Report.objects.get(id=report_id)
+        except Report.DoesNotExist:
+            report = None
+        finally:
+            return report
+    
+    def post(self, request, report_id, *args, **kwargs):
+        report = self.get_object(report_id)
+
+        if report is not None:
+            if verify_owner(report.pupil.owner, self.request.user):
+                return super().post(request, report_id, *args, **kwargs)
+            else:
+                raise PermissionDenied()
+        raise Http404()
+    
 
 class GetReportPeriod(LoginRequiredMixin, View):
     """Класс представления для получения периода отчёта"""
-    def get_object(self, report_id, queryset=None):
-        return Report.objects.get(id=report_id)
+    def get_object(self, report_id=None, queryset=None):
+        try:
+            if report_id is None:
+                report_id = self.kwargs.get(self.pk_url_kwarg)
+
+            report = Report.objects.get(id=report_id)
+        except Report.DoesNotExist:
+            report = None
+        finally:
+            return report
     
     def get(self, request, report_id):
         report = self.get_object(report_id)
 
-        response_data = {
-            'start_period': report.start_period,
-            'end_period': report.end_period
-            }
+        if report is not None:
+            response_data = {
+                'start_period': report.start_period,
+                'end_period': report.end_period
+                }
 
-        return JsonResponse(response_data)
+            return JsonResponse(response_data)
+        else:
+            raise Http404()
 
 
 class SaveReportAsPdf(View):
     """Класс представления для сохранения отчёта в формате pdf"""
-    def get_object(self, report_id, queryset=None):
-        return Report.objects.get(id=report_id)
+    def get_object(self, report_id=None, queryset=None):
+        try:
+            if report_id is None:
+                report_id = self.kwargs.get(self.pk_url_kwarg)
+
+            report = Report.objects.get(id=report_id)
+        except Report.DoesNotExist:
+            report = None
+        finally:
+            return report
     
     def get(self, request, report_id):
         report = self.get_object(report_id)
 
-        pdf_file = generate_pdf(report, request)
+        if report is not None:
+            pdf_file = generate_pdf(report, request)
 
-        filename = slugify(str(report))
+            filename = slugify(str(report))
 
-        response = HttpResponse(pdf_file, content_type='application/pdf', headers={
-            'Content-Disposition': f'attachment; filename="{filename}.pdf"'
-        })
+            response = HttpResponse(pdf_file, content_type='application/pdf', headers={
+                'Content-Disposition': f'attachment; filename="{filename}.pdf"'
+            })
 
-        return response
+            return response
+        else:
+            raise Http404()
 
 
 class SaveReportAsPng(View):

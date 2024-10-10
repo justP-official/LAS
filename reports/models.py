@@ -15,7 +15,7 @@ class Report(models.Model):
         return f"{self.pupil} {self.start_period} {self.end_period}"
     
     def get_absolute_url(self):
-        return reverse("reports:read_report", kwargs={"pk": self.pk})
+        return reverse("reports:read_report", kwargs={"report_id": self.pk})
     
     class Meta:
         db_table = 'reports'

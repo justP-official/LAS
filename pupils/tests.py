@@ -187,7 +187,7 @@ class PupilsAppTestCase(TestCase):
         '''Тест страницы обновления данных ученика'''
         self.client.force_login(self.user_owner)
 
-        path = reverse('pupils:update_pupil', kwargs={'pk': 1})
+        path = reverse('pupils:update_pupil', kwargs={'pupil_id': 1})
 
         response = self.client.get(path)
 
@@ -197,7 +197,7 @@ class PupilsAppTestCase(TestCase):
 
     def test_redirect_update_pupil_page(self):
         '''Тест перенаправления неавторизованного пользователя со страницы обновления данных ученика'''
-        path = reverse('pupils:update_pupil', kwargs={'pk': 1})
+        path = reverse('pupils:update_pupil', kwargs={'pupil_id': 1})
 
         response = self.client.get(path)
 
@@ -210,7 +210,7 @@ class PupilsAppTestCase(TestCase):
         '''Тест обновления данных ученика'''
         self.client.force_login(self.user_owner)
 
-        path = reverse('pupils:update_pupil', kwargs={'pk': 1})
+        path = reverse('pupils:update_pupil', kwargs={'pupil_id': 1})
 
         response = self.client.post(path, data=self.pupil_data)
 
@@ -226,7 +226,7 @@ class PupilsAppTestCase(TestCase):
 
         self.client.force_login(self.user_owner)
 
-        path = reverse('pupils:update_pupil', kwargs={'pk': 1})
+        path = reverse('pupils:update_pupil', kwargs={'pupil_id': 1})
 
         response = self.client.post(path, data=self.pupil_data)
 
@@ -243,9 +243,25 @@ class PupilsAppTestCase(TestCase):
 
         self.client.force_login(self.user_owner)
 
-        path = reverse('pupils:update_pupil', kwargs={'pk': 1})
+        path = reverse('pupils:update_pupil', kwargs={'pupil_id': 1})
 
         response = self.client.post(path, data=self.pupil_data)
 
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertContains(response, 'Ученик с таким Имя уже существует')
+
+    def test_update_pupil_forbidden(self):
+        '''Тест запрета обновления чужого ученика'''
+        self.client.force_login(self.user_not_owner)
+
+        path = reverse('pupils:update_pupil', kwargs={'pupil_id': 1})
+
+        response = self.client.get(path)
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertContains(response, '403')
+
+        response = self.client.post(path, data=self.pupil_data)
+
+        self.assertEqual(response.status_code, HTTPStatus.OK)
+        self.assertContains(response, '403')

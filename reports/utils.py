@@ -1,7 +1,5 @@
 import requests
 
-from LAS import settings
-
 from django.template.loader import render_to_string
 from django.urls import reverse
 
@@ -36,7 +34,6 @@ def generate_pdf(report, request):
     )
 
     pdf = HTML(string=html_string, base_url=request.build_absolute_uri()).write_pdf(
-        # stylesheets=[CSS(string="body {background-color: #fff !important}")]
         stylesheets=[
             CSS(base_url=request.build_absolute_uri(), url=f'{root_url}static/assets/css/bootstrap.min.css'),
             CSS(base_url=request.build_absolute_uri(), url=f'{root_url}static/assets/css/style.css'),
