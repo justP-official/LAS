@@ -1,16 +1,21 @@
-const datetimepicker = document.querySelectorAll('input[type=datetime-local]');
+let current_page = `/${window.location.pathname.split('/')[1]}/`;
+if (current_page) {
+    let active_link = document.querySelector(`.nav-link[href='${current_page}']`);
 
-const datetimepicker_config = {
-    enableTime: true,
-    dateFormat: "d-m-Y H:i",
-    'locale': 'ru'
+    active_link.classList.add('active');
 }
 
-flatpickr(datetimepicker, datetimepicker_config)
+async function get_data(url) {
+    // асинхронная функция для получения данных по url
+    let response = await fetch(url);  // делаем запрос на адрес
 
-// let f = document.querySelector('.form')
+    if (response.ok) {  // если запрос успешно выполнен
+        let json_data = await response.json();  // парсим данные в json
 
-// f.addEventListener('submit', function(e) {
-//     e.preventDefault()
-//     console.log(f.datetime.value)
-// })
+        return Object.values(json_data);  // возвращаем значения json
+    }
+
+    return [];  // иначе возвращаем пустой массив
+}
+
+export {get_data}

@@ -30,9 +30,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('secret_key')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('debug')
+DEBUG_MODES = {
+    'True': True,
+    'False': False
+}
 
-ALLOWED_HOSTS = [*os.environ.get('allowed_hosts').split(',')] if not DEBUG else []
+DEBUG = DEBUG_MODES[os.environ.get('debug_mode')]
+
+ALLOWED_HOSTS = [] if DEBUG else os.environ.get('allowed_hosts').split(', ') 
 
 
 # Application definition

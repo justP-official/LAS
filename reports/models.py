@@ -12,10 +12,10 @@ class Report(models.Model):
     end_period = models.DateField(verbose_name='Конец периода', default=datetime.date.today)
 
     def __str__(self):
-        return f"{self.pupil} {self.start_period} {self.end_period}"
+        return f"{self.pupil} - с {self.start_period.strftime('%d %b %Y')} по {self.end_period.strftime('%d %b %Y')}"
     
     def get_absolute_url(self):
-        return reverse("reports:read_report", kwargs={"pk": self.pk})
+        return reverse("reports:read_report", kwargs={"report_id": self.pk})
     
     class Meta:
         db_table = 'reports'

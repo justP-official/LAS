@@ -11,7 +11,7 @@ class UserLogin(LoginView):
     """Класс представления для авторизации пользователя"""
     template_name = 'user/login.html'
     form_class = UserLoginForm
-    extra_context = {'title': 'Easyhower - Войти',}
+    extra_context = {'title': 'L.A.S - Войти',}
 
 
 class UserProfile(LoginRequiredMixin, TemplateView):
@@ -21,7 +21,7 @@ class UserProfile(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = UserPasswordChangeForm(user=self.request.user)
-        context['title'] = 'Easyhower - Профиль'
+        context['title'] = 'L.A.S - Профиль'
         return context
     
 

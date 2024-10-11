@@ -31,7 +31,8 @@ class Lesson(models.Model):
                                 )
     
     lesson_datetime = models.DateTimeField(verbose_name='Дата проведения урока',
-                                    auto_now_add=False
+                                    auto_now_add=False,
+                                    unique=True
                                     )
     
     lesson_duration = models.DecimalField(verbose_name='Продолжительность урока', 
@@ -54,7 +55,7 @@ class Lesson(models.Model):
         return f"Урок с учеником: {self.pupil}; По предмету: {self.subject}; За {self.lesson_datetime.strftime('%d %b %Y %H:%M')}"
     
     def get_absolute_url(self):
-        return reverse("lessons:update_lesson", kwargs={"pk": self.pk})
+        return reverse("lessons:update_lesson", kwargs={"lesson_id": self.pk})
     
 
     class Meta:

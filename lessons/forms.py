@@ -4,17 +4,26 @@ from lessons.models import Lesson
 
 from pupils.models import Pupil
 
-from subjects.models import Subjects
-
 
 class LessonsFilterForm(forms.ModelForm):
     """Класс формы фильтрации уроков"""
+    lesson_date = forms.DateField(
+        required=False, 
+        label='Дата проведения урока', 
+        widget=forms.DateInput(
+            attrs={
+                'class': 'form-control', 
+                'type': 'date', 
+                'placeholder': '08-09-2024'
+            }
+        )
+    )
+
     class Meta:
         model = Lesson
-        fields = ('pupil', 'lesson_datetime', 'subject')
+        fields = ('pupil', 'subject')
         widgets = {
             'pupil': forms.Select(attrs={'class': 'form-select'}),
-            'lesson_datetime': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local', 'placeholder': '08-09-2024 12:00'}),
             'subject': forms.Select(attrs={'class': 'form-select'}),
         }
     
@@ -26,8 +35,6 @@ class LessonsFilterForm(forms.ModelForm):
         self.fields['pupil'].queryset = Pupil.objects.filter(owner=self.user, is_active=True)
         self.fields['pupil'].empty_label = 'Выбери ученика'
         self.fields['pupil'].required = False
-
-        self.fields['lesson_datetime'].required = False
 
         self.fields['subject'].empty_label = 'Выбери предмет'
         self.fields['subject'].required = False

@@ -40,9 +40,9 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title">{{ lesson.pupil }}</h5>
-              <p class="card-text">Денег заработано: {{ lesson.money_recived }} руб</p>
+              <p class="card-text">Денег заработано: {{ lesson.money_recived|floatformat }} руб</p>
               <p class="card-text">Дата проведения: {{ lesson.lesson_datetime }}</p>
-              <p class="card-text">Времени затрачено: {{ lesson.lesson_duration }}</p>
+              <p class="card-text">Времени затрачено: {{ lesson.lesson_duration|floatformat }} час{{ lesson.lesson_duration|pluralize:'а' }}</p>
               <div class="subjects">
                 <p class="subjects__text fw-bold">Предмет</p>
                 <span class="badge text-bg-primary">{{ lesson.subject }}</span>
@@ -66,5 +66,5 @@
 {% block additional_scripts %}
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://npmcdn.com/flatpickr/dist/l10n/ru.js"></script>
-<script src="{% static "assets/js/datetimepikers.js" %}"></script>
+<script src="{% static "assets/js/datepikers.js" %}"></script>
 {% endblock  %}

@@ -1,8 +1,6 @@
-import datetime
-
-from django.utils import timezone
 from django.urls import reverse_lazy
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
+from django.core.exceptions import PermissionDenied
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import View, ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
@@ -10,6 +8,8 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from lessons.models import Lesson
 
 from lessons.forms import LessonsFilterForm, CreateLessonForm, UpdateLessonForm
+
+from user.utils import verify_owner
 
 
 class LessonsListView(LoginRequiredMixin, ListView):
@@ -24,20 +24,15 @@ class LessonsListView(LoginRequiredMixin, ListView):
 
         pupil = self.request.GET.get('pupil', None)
 
-        lesson_datetime = self.request.GET.get('lesson_datetime', None)
+        lesson_date = self.request.GET.get('lesson_date', None)
 
         subject = self.request.GET.get('subject', None)
 
         if pupil:
             lessons = lessons.filter(pupil__id=pupil)
 
-        if lesson_datetime:
-            # получаем объект datetime из запроса
-            dt = timezone.datetime.strptime(lesson_datetime, '%Y-%m-%d %H:%M')
-            # устанавливаем дате часовой пояс (иначе django ругается)
-            dt = timezone.make_aware(dt, timezone.get_current_timezone())
-
-            lessons = lessons.filter(lesson_datetime__date=dt.date(), lesson_datetime__time=dt.time())
+        if lesson_date:
+            lessons = lessons.filter(lesson_datetime__date=lesson_date)
 
         if subject:
             lessons = lessons.filter(subject__id=subject)
@@ -80,6 +75,39 @@ class UpdateLessonView(LoginRequiredMixin, UpdateView):
     form_class = UpdateLessonForm
     model = Lesson
     context_object_name = 'lesson'
+    pk_url_kwarg = 'lesson_id'
+    
+    def get_object(self, lesson_id=None, queryset=None):
+        try:
+            if lesson_id is None:
+                lesson_id = self.kwargs.get(self.pk_url_kwarg)
+
+            lesson = Lesson.objects.get(pk=lesson_id)
+            
+        except Lesson.DoesNotExist:
+            lesson = None
+        finally:
+            return lesson
+    
+    def get(self, request, lesson_id, *args, **kwargs):
+        lesson = self.get_object(lesson_id)
+
+        if lesson is not None:
+            if verify_owner(lesson.pupil.owner, self.request.user):
+                return super().get(request, lesson_id, *args, **kwargs)
+            else:
+                raise PermissionDenied()
+        raise Http404()
+    
+    def post(self, request, lesson_id, *args, **kwargs):
+        lesson = self.get_object(lesson_id)
+
+        if lesson is not None:
+            if verify_owner(lesson.pupil.owner, self.request.user):
+                return super().post(request, lesson_id, *args, **kwargs)
+            else:
+                raise PermissionDenied()
+        raise Http404()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -100,16 +128,51 @@ class DeleteLessonView(LoginRequiredMixin, DeleteView):
     """Класс представления для удаления урока"""
     model = Lesson
     success_url = reverse_lazy('lessons:lessons_list')
+    pk_url_kwarg = 'lesson_id'
 
+    def get_object(self, lesson_id=None, queryset=None):
+        try:
+            if lesson_id is None:
+                lesson_id = self.kwargs.get(self.pk_url_kwarg)
+
+            lesson = Lesson.objects.get(pk=lesson_id)
+            
+        except Lesson.DoesNotExist:
+            lesson = None
+        finally:
+            return lesson
+    
+    def post(self, request, lesson_id, *args, **kwargs):
+        lesson = self.get_object(lesson_id)
+
+        if lesson is not None:
+            if verify_owner(lesson.pupil.owner, self.request.user):
+                return super().post(request, lesson_id, *args, **kwargs)
+            else:
+                raise PermissionDenied()
+        raise Http404()
+    
 
 class GetLessonDatetime(LoginRequiredMixin, View):
     """Класс представления для получения даты проведения урока"""
-    def get_object(self, lesson_id, queryset=None):
-        return Lesson.objects.get(id=lesson_id)
+    def get_object(self, lesson_id=None, queryset=None):
+        try:
+            if lesson_id is None:
+                lesson_id = self.kwargs.get(self.pk_url_kwarg)
+
+            lesson = Lesson.objects.get(pk=lesson_id)
+            
+        except Lesson.DoesNotExist:
+            lesson = None
+        finally:
+            return lesson
     
     def get(self, request, lesson_id):
         lesson = self.get_object(lesson_id)
 
-        response_data = {'lesson_datetime': lesson.lesson_datetime}
+        if lesson is not None:
+            response_data = {'lesson_datetime': lesson.lesson_datetime}
 
-        return JsonResponse(response_data)
+            return JsonResponse(response_data)
+        else:
+            raise Http404()

@@ -8,7 +8,6 @@ body {
 
 .menu {
     background-color: #7EC8FC;
-    /* border: 1px solid black; */
 }
 
 .menu__brand {
@@ -19,6 +18,10 @@ body {
 
 .menu__link {
     color: #fff;
+}
+
+.icon {
+    margin-right: 6px;
 }
 
 .content {
@@ -54,7 +57,7 @@ body {
 
 .section__img {
     display: block;
-    width: 200px;
+    max-width: 500px;
     margin-inline: auto;
     margin-bottom: 24px;
 }
@@ -68,6 +71,14 @@ body {
 }
 
 .form__item {
+    margin-bottom: 24px;
+}
+
+.form__errors {
+    background-color: #000;
+    color: #fff;
+    padding: 8px;
+    border-radius: 6px;
     margin-bottom: 24px;
 }
 

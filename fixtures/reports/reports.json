@@ -1,0 +1,56 @@
+[
+    {
+        "model": "reports.report",
+        "pk": 1,
+        "fields": {
+            "pupil": 5,
+            "start_period": "2024-09-01",
+            "end_period": "2024-09-10"
+        }
+    },
+    {
+        "model": "reports.report",
+        "pk": 2,
+        "fields": {
+            "pupil": 2,
+            "start_period": "2024-09-01",
+            "end_period": "2024-09-10"
+        }
+    },
+    {
+        "model": "reports.report",
+        "pk": 3,
+        "fields": {
+            "pupil": 3,
+            "start_period": "2024-09-01",
+            "end_period": "2024-09-09"
+        }
+    },
+    {
+        "model": "reports.report",
+        "pk": 4,
+        "fields": {
+            "pupil": 4,
+            "start_period": "2024-09-01",
+            "end_period": "2024-09-11"
+        }
+    },
+    {
+        "model": "reports.report",
+        "pk": 5,
+        "fields": {
+            "pupil": 6,
+            "start_period": "2024-08-01",
+            "end_period": "2024-08-31"
+        }
+    },
+    {
+        "model": "reports.report",
+        "pk": 6,
+        "fields": {
+            "pupil": 6,
+            "start_period": "2024-08-01",
+            "end_period": "2024-08-29"
+        }
+    }
+]

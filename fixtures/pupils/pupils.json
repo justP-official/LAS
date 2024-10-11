@@ -1,0 +1,119 @@
+[
+    {
+        "model": "pupils.pupil",
+        "pk": 1,
+        "fields": {
+            "name": "Иван",
+            "description": "Описание",
+            "price_per_hour": 700,
+            "class_counter": 10,
+            "is_active": false,
+            "skype_only": false,
+            "owner": 1,
+            "subjects": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "pupils.pupil",
+        "pk": 2,
+        "fields": {
+            "name": "Рома",
+            "description": "Москва",
+            "price_per_hour": 1000,
+            "class_counter": 8,
+            "is_active": true,
+            "skype_only": true,
+            "owner": 1,
+            "subjects": [
+                1,
+                2
+            ]
+        }
+    },
+    {
+        "model": "pupils.pupil",
+        "pk": 3,
+        "fields": {
+            "name": "Алика",
+            "description": "Москва",
+            "price_per_hour": 1000,
+            "class_counter": 9,
+            "is_active": true,
+            "skype_only": true,
+            "owner": 1,
+            "subjects": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "pupils.pupil",
+        "pk": 4,
+        "fields": {
+            "name": "Матвей",
+            "description": "От Даши",
+            "price_per_hour": 700,
+            "class_counter": 5,
+            "is_active": true,
+            "skype_only": false,
+            "owner": 1,
+            "subjects": [
+                2
+            ]
+        }
+    },
+    {
+        "model": "pupils.pupil",
+        "pk": 5,
+        "fields": {
+            "name": "Никита",
+            "description": "",
+            "price_per_hour": 700,
+            "class_counter": 10,
+            "is_active": true,
+            "skype_only": false,
+            "owner": 1,
+            "subjects": [
+                1
+            ]
+        }
+    },
+    {
+        "model": "pupils.pupil",
+        "pk": 6,
+        "fields": {
+            "name": "Семён",
+            "description": "",
+            "price_per_hour": 1000,
+            "class_counter": 9,
+            "is_active": true,
+            "skype_only": true,
+            "owner": 1,
+            "subjects": [
+                1,
+                2,
+                3
+            ]
+        }
+    },
+    {
+        "model": "pupils.pupil",
+        "pk": 7,
+        "fields": {
+            "name": "Алиса",
+            "description": "",
+            "price_per_hour": 700,
+            "class_counter": 9,
+            "is_active": true,
+            "skype_only": false,
+            "owner": 1,
+            "subjects": [
+                1,
+                2,
+                3
+            ]
+        }
+    }
+]
