@@ -10,7 +10,6 @@
     <h2 class="section__h2 text-center">Отчёт</h2>
     <p class="section__text">{{ report }}:</p>
     {% report_lessons report.pupil.id report.start_period report.end_period %}
-    <a href="{% url "reports:save_report_as_pdf" report.id %}" class="btn btn-primary" download><i class="fa-solid fa-download icon"></i>Сохранить в PDF</a>
     <a href="{% url "reports:save_report_as_png" report.id %}" class="btn btn-primary" download><i class="fa-solid fa-download icon"></i>Сохранить в PNG</a>
   </section>
 </div>

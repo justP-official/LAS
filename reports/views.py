@@ -11,7 +11,7 @@ from reports.models import Report
 
 from reports.forms import ReportsFilterForm, CreateReportForm, UpdateReportForm
 
-from reports.utils import generate_pdf, convert_pdf_to_png
+from reports.utils import generate_pdf, generate_png
 
 from user.utils import verify_owner
 
@@ -250,7 +250,7 @@ class SaveReportAsPng(View):
     def get(self, request, report_id):
         report = self.get_object(report_id)
 
-        png_file = convert_pdf_to_png(report, request)
+        png_file = generate_png(report)
 
         filename = slugify(str(report))
 
