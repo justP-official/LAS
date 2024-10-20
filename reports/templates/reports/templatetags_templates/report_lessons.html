@@ -8,7 +8,7 @@
       <li>
         {{ lesson.subject }}; 
         {{ lesson.lesson_datetime }};
-        {% if lesson.lesson_duration != 1%}
+        {% if lesson.lesson_duration != 1 %}
           Продолжительность урока {{ lesson.lesson_duration|floatformat }} час{{ lesson.lesson_duration|pluralize:'а' }}
         {% endif %}
       </li>

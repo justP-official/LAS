@@ -1,11 +1,13 @@
-import requests
+import io
 
 from django.template.loader import render_to_string
 from django.urls import reverse
 
 from weasyprint import HTML, CSS
 
-import pymupdf
+from PIL import Image, ImageDraw, ImageFont
+
+from LAS import settings
 
 from lessons.utils import get_lessons_for_period
 
@@ -44,26 +46,58 @@ def generate_pdf(report, request):
     return pdf
 
 
-def convert_pdf_to_png(report, request):
+def generate_png(report):
     """
-    Функция для генерации png файла из pdf.
+    Функция для генерации png файла из отчёта.
 
     Параметры:
     ----------
     report - отчёт, содержащий информацию об уроках с конкретным учеником за определённый период.
 
-    request - запрос к серверу.
-
     Возвращаемое значение:
     ----------------------
-    png - png файл
+    img - готовое изображение.
     """
-    root_url = request.build_absolute_uri("/")
 
-    r = requests.get(f"{root_url}{reverse('reports:save_report_as_pdf', kwargs={'report_id': report.id})}").content
+    lessons = get_lessons_for_period(report.pupil.id, report.start_period, report.end_period)
 
-    doc = pymupdf.Document(stream=r)
+    img_weight = 600
+    img_height = len(lessons) * 20 + 100
 
-    png = doc[0].get_pixmap().tobytes("png")
+    x = 10
+    y = 10
+    dy = 20
 
-    return png
+    img = Image.new(size=(img_weight, img_height), color=(255, 255, 255), mode='RGB')
+
+    drawer = ImageDraw.Draw(img)
+
+    font = ImageFont.truetype(f"{settings.STATIC_ROOT}/assets/fonts/FreeSans.ttf", 16, encoding='UTF-8')
+
+    drawer.text((x, y), f'{str(report)}:', fill=(0, 0, 0), font=font, align='center')
+
+    y += dy
+
+    for i, lesson in enumerate(lessons):
+        lesson_text = f'{lesson.subject}; {lesson.lesson_datetime:%d %b %Y %H:%M}; '
+        if lesson.lesson_duration != 1:
+            lesson_text += f"Продолжительность урока: {format(lesson.lesson_duration, '.2f').rstrip('0').rstrip('.')} часа"
+
+        drawer.text((x + 10, y), f'{i + 1}. {lesson_text}', fill=(0, 0, 0), font=font)
+        y += dy
+
+    y += dy
+
+    drawer.line([(x, y), (img_weight - 10, y)], (0, 0, 0), 2)
+
+    y += dy
+
+    total_money = format(lessons.total_money(), '.2f').rstrip('0').rstrip('.')
+
+    drawer.text((x, y), f'Итого: {total_money} руб', fill=(0, 0, 0), font=font)
+
+    buff = io.BytesIO()
+
+    img.save(buff, 'PNG')
+
+    return buff.getvalue()
